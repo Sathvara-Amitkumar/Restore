@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Dashboard | reStore</title>
+    <link rel="stylesheet" href="style.css">
+    <script>
+        function loadStoredData() {
+            fetch("/get-data")
+                .then((res) => res.json())
+                .then((data) => {
+                    let output = "<h3>Saved Credentials</h3>";
+                    if (data.length === 0) {
+                        output += "<p>No saved credentials yet.</p>";
+                    } else {
+                        output += `
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Website</th>
+                                    <th>Username</th>
+                                    <th>Password</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>`;
+                        data.forEach((item) => {
+                            output += `
+                                <tr>
+                                    <td>${item.url}</td>
+                                    <td>${item.username}</td>
+                                    <td>${item.password}</td>
+                                    <td>
+                                        <form action="/delete-data" method="POST">
+                                            <input type="hidden" name="id" value="${item.id}">
+                                            <button type="submit" class="delete-btn">Delete</button>
+                                        </form>
+                                    </td>
+                                </tr>`;
+                        });
+                        output += "</tbody></table>";
+                    }
+                    document.getElementById("storedData").innerHTML = output;
+                });
+        }
+
+        window.onload = loadStoredData;
+    </script>
+</head>
+<body>
+    <div class="main-container">
+        <!-- Left Side: Form -->
+        <div class="form-section">
+            <h2>Save Credentials</h2>
+            <form action="/store-data" method="POST">
+                <input type="text" name="url" placeholder="Website URL" required>
+                <input type="text" name="username" placeholder="Username" required>
+                <input type="password" name="password" placeholder="Password" required>
+                <button type="submit">Save</button>
+            </form>
+            <a href="/logout"><button class="logout">Logout</button></a>
+        </div>
+
+        <div class="data-section">
+            <div id="storedData"></div>
+        </div>
+    </div>
+</body>
+</html>

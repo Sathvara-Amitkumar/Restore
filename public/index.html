@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>reStore | Home</title>
+    <link rel="stylesheet" href="style.css">
+    <script>
+        function checkLogin() {
+            fetch("/is-logged-in")
+                .then((res) => res.json())
+                .then((data) => {
+                    if (data.loggedIn) {
+                        document.body.classList.remove("blurred");
+                    } else {
+                        document.body.classList.add("blurred");
+                    }
+                });
+        }
+        window.onload = checkLogin;
+    </script>
+</head>
+<body>
+    <header>
+        <div class="logo">reStore</div>
+        <nav>
+            <a href="/login.html" class="login-link">Login</a>
+        </nav>
+    </header>
+
+    <div class="home-container">
+        <h1>Welcome to reStore</h1>
+        <p>Securely store and manage your credentials.</p>
+    </div>
+</body>
+</html>
